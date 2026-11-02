@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 # Creates a 4096-bit RSA key pair named school
-rm -f school school.pub
-ssh-keygen -t rsa -b 4096 -f school -N "betty"
+SCRIPT_DIR=$(dirname "$0")
+rm -f "$SCRIPT_DIR/school" "$SCRIPT_DIR/school.pub"
+ssh-keygen -t rsa -b 4096 -f "$SCRIPT_DIR/school" -N "betty"
