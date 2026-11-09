@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 # Creates a 4096-bit RSA SSH key pair named school with passphrase betty
-ssh-keygen -t rsa -b 4096 -f ./school -N "betty" -q <<< "y"
+
+# Get the exact folder directory where this script file lives
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+
+# Generate the key exactly inside that folder
+ssh-keygen -t rsa -b 4096 -f "$SCRIPT_DIR/school" -N "betty" -q <<< "y"
