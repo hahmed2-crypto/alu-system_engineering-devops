@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Installs Nginx and configures a custom X-Served-By HTTP response header
+
+apt-get update -y
+apt-get install -y nginx
+mkdir -p /var/www/html
+echo "Holberton School" > /var/www/html/index.html
+# shellcheck disable=SC2154
+cat << NGINX > /etc/nginx/sites-available/default
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	root /var/www/html;
+	index index.html index.htm index.nginx-debian.html;
+	server_name _;
+	add_header X-Served-By $HOSTNAME;
+	location / {
+		try_files \$uri \$uri/ =404;
+	}
+	location /redirect_me {
+		return 301 https://youtube.com;
+	}
+}
+NGINX
+service nginx restart
