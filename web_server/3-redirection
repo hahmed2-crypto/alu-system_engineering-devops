@@ -1,10 +1,30 @@
 #!/usr/bin/env bash
-# Installs nginx and configures a 301 redirect for /redirect_me
-conf=/etc/nginx/sites-available/default
-sudo apt-get update -y
-sudo apt-get install -y nginx
-echo "Holberton School for the win!" | sudo tee /var/www/html/index.html > /dev/null
-if ! grep -q "location /redirect_me" "$conf"; then
-  sudo sed -i 's|server_name _;|server_name _;\n\n\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}|' "$conf"
-fi
-sudo service nginx restart
+# Installs Nginx and configures /redirect_me to perform a 301 redirect
+
+apt-get update -y
+apt-get install -y nginx
+
+mkdir -p /var/www/html
+echo "Holberton School" > /var/www/html/index.html
+
+cat << 'NGINX' > /etc/nginx/sites-available/default
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	root /var/www/html;
+	index index.html index.htm index.nginx-debian.html;
+
+	server_name _;
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+
+	location /redirect_me {
+		return 301 https://youtube.com;
+	}
+}
+NGINX
+
+service nginx restart
