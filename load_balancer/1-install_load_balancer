@@ -6,17 +6,13 @@ apt-get install -y haproxy
 echo "ENABLED=1" >> /etc/default/haproxy
 cat << NGINX >> /etc/haproxy/haproxy.cfg
 
-frontend http-in
+listen load_balancer
 	bind *:80
 	mode http
-	option forwardfor
-	option http-server-close
-	default_backend webservers
-
-backend webservers
 	balance roundrobin
-	server 7236-web-01 18.171.241.16:80 check inter 200 rise 1 fall 2
-	server 7236-web-02 18.171.209.89:80 check inter 200 rise 1 fall 2
+	option httpclose
+	option forwardfor
+	server 7236-web-01 18.171.241.16:80 check
+	server 7236-web-02 18.171.209.89:80 check
 NGINX
 service haproxy restart
-sleep 2
