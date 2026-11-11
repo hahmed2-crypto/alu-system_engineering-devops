@@ -3,10 +3,8 @@
 
 apt-get update -y
 apt-get install -y haproxy
-
 echo "ENABLED=1" >> /etc/default/haproxy
-
-cat << 'EOF' >> /etc/haproxy/haproxy.cfg
+cat << NGINX >> /etc/haproxy/haproxy.cfg
 
 frontend http-in
 	bind *:80
@@ -15,8 +13,8 @@ frontend http-in
 
 backend webservers
 	balance roundrobin
-	server 7236-web-01 18.171.241.16:80 check
-	server 7236-web-02 18.171.209.89:80 check
-EOF
-
+	server 7236-web-01 18.171.241.16:80 check inter 200 rise 1 fall 2
+	server 7236-web-02 18.171.209.89:80 check inter 200 rise 1 fall 2
+NGINX
 service haproxy restart
+sleep 2
