@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 # Installs Nginx and configures a custom X-Served-By HTTP response header
 
-sudo apt-get update -y
-sudo apt-get install -y nginx
-sudo mkdir -p /var/www/html
-echo "Holberton School" | sudo tee /var/www/html/index.html > /dev/null
+apt-get update -y
+apt-get install -y nginx
+mkdir -p /var/www/html /etc/nginx/sites-enabled
+echo "Holberton School" > /var/www/html/index.html
 HOST=$(hostname)
-sudo tee /etc/nginx/sites-available/default > /dev/null << NGINX
+cat << NGINX > /etc/nginx/sites-available/default
 server {
 	listen 80 default_server;
-	listen [::]:80 default_server;
 	root /var/www/html;
-	index index.html index.htm index.nginx-debian.html;
+	index index.html index.htm;
 	server_name _;
 	add_header X-Served-By $HOST;
 	location / {
@@ -22,4 +21,5 @@ server {
 	}
 }
 NGINX
-sudo service nginx restart
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+service nginx restart

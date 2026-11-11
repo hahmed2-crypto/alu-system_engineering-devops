@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 # Installs and configures HAProxy with round-robin load balancing for web-01 and web-02
 
-sudo apt-get update -y
-sudo apt-get install -y haproxy
-echo "ENABLED=1" | sudo tee -a /etc/default/haproxy > /dev/null
-sudo tee -a /etc/haproxy/haproxy.cfg > /dev/null << NGINX
+apt-get update -y
+apt-get install -y haproxy
+echo "ENABLED=1" >> /etc/default/haproxy
+cat << NGINX >> /etc/haproxy/haproxy.cfg
 
 frontend http-in
 	bind *:80
 	mode http
+	option forwardfor
+	option http-server-close
 	default_backend webservers
 
 backend webservers
@@ -16,5 +18,5 @@ backend webservers
 	server 7236-web-01 18.171.241.16:80 check inter 200 rise 1 fall 2
 	server 7236-web-02 18.171.209.89:80 check inter 200 rise 1 fall 2
 NGINX
-sudo service haproxy restart
+service haproxy restart
 sleep 2
