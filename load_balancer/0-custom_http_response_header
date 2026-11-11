@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Installs Nginx and configures a custom X-Served-By HTTP response header
 
-apt-get update -y
-apt-get install -y nginx
-mkdir -p /var/www/html
-echo "Holberton School" > /var/www/html/index.html
+sudo apt-get update -y
+sudo apt-get install -y nginx
+sudo mkdir -p /var/www/html
+echo "Holberton School" | sudo tee /var/www/html/index.html > /dev/null
 HOST=$(hostname)
-cat << NGINX > /etc/nginx/sites-available/default
+sudo tee /etc/nginx/sites-available/default > /dev/null << NGINX
 server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
@@ -22,4 +22,4 @@ server {
 	}
 }
 NGINX
-service nginx restart
+sudo service nginx restart
