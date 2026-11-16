@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 # Starts the Apache2 service so it serves the default page on port 80
-service apache2 start
+rm -f /var/run/apache2/apache2.pid
+service apache2 restart
