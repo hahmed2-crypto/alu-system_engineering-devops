@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Starts the Apache2 service so it serves the default page on port 80
+service apache2 start
